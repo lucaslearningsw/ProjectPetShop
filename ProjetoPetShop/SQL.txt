@@ -1,0 +1,187 @@
+﻿SQL 
+
+CHAR AND TEXT 
+
+If you need to store data that might exceed the 64 KB limit for varchar columns, you
+will need to use one of the text types.
+
+Text type Maximum number of bytes
+Tinytext 255
+Text 65,535
+Mediumtext 16,777,215
+Longtext 4,294,967,29
+
+• If the data being loaded into a text column exceeds the maximum size for that type,
+the data will be truncated.
+
+When using text columns for sorting or grouping, only the first 1,024 bytes are
+used, although this limit may be increased if necessary
+
+If you are creating a column for free-form data entry, such as a notes column to hold
+data about customer interactions with your company’s customer service department,
+then varchar will probably be adequate. If you are storing documents, however, you
+should choose either the mediumtext or longtext type.
+
+----------------------------------------------------------------------
+
+NUMERIC 
+Tinyint −128 to 127 0 to 255
+Smallint −32,768 to 32,767 0 to 65,535
+Mediumint −8,388,608 to 8,388,607 0 to 16,777,215
+Int −2,147,483,648 to 2,147,483,647 0 to 4,294,967,295
+Bigint −9,223,372,036,854,775,808 to 9,223,372,036,854,775,807 0 to 18,446,744,073,709,551,615
+
+defined as float(4,2) will store a total of four digits, two to the left
+of the decimal and two to the right of the decimal. Therefore, such a column would
+handle the numbers 27.44 and 8.19 just fine, but the number 17.8675 would be rounded to 17.87, 
+
+----------------------------------------------------------------------
+
+TEMPORAL DATA
+
+about dates and/or times. This type of data is referred to as temporal, and some examples of temporal data in a database include
+
+Type Default format Allowable values
+Date YYYY-MM-DD 1000-01-01 to 9999-12-31
+Datetime YYYY-MM-DD HH:MI:SS 1000-01-01 00:00:00 to 9999-12-31 23:59:59
+Timestamp YYYY-MM-DD HH:MI:SS 1970-01-01 00:00:00 to 2037-12-31 23:59:59
+Year YYYY 1901 to 2155
+Time HHH:MI:SS −838:59:59 to 838:59:59
+
+
+Table 2-6 describes the various components of the date formats shown in Table 2-5.
+Table 2-6. Date format components
+Component Definition Range
+YYYY Year, including century 1000 to 9999
+MM Month 01 (January) to 12 (December)
+DD Day 01 to 31
+HH Hour 00 to 23
+HHH Hours (elapsed) −838 to 838
+MI Minute 00 to 59
+SS Second 00 to 59
+
+
+----------------------------------------------------------------------
+--SELECT * FROM Customer;
+
+--INSERT INTO Customer
+--(fname, lname, email, phone, cep_entrega) VALUES
+--('Lucas', 'Lima', 'Lucas@test.com', '11991635199', '12345678');
+
+--ALTER TABLE Customer DROP CONSTRAINT pk_customer_id;
+
+--ALTER TABLE Customer DROP COLUMN customer_id;
+
+
+ALTER TABLE Customer 
+ADD customer_id int IDENTITY(1,1) PRIMARY KEY;
+
+
+
+-------------------------------------------
+
+CREATE TABLE CLIENTE (
+
+cpf_cliente NUMERIC (11),
+nome_cliente VARCHAR (50),
+telefone_cliente VARCHAR (11),
+cep_cliente VARCHAR (8),
+email_cliente VARCHAR (50),
+CONSTRAINT cpf_pk PRIMARY KEY (cpf_cliente)
+);
+
+--------------------------------------------------
+
+EXEC sp_rename 'old_table_name', 'new_table_name'
+
+
+CREATE TABLE Consulta (
+
+vetarinaria VARCHAR(30) NOT NULL,
+id_consulta INT NOT NULL IDENTITY (1,1) PRIMARY KEY,
+cpf_cliente NUMERIC (11),
+animal VARCHAR (20),
+descricao VARCHAR (255),
+data_aberturta DATE,
+data_consulta DATE,
+horario_consulta TIME,
+data_encerramento DATE
+
+CONSTRAINT Cliente_fk FOREIGN KEY (cpf_cliente)
+REFERENCES Cliente (cpf_cliente)
+);
+
+------------------------------------------------
+
+CREATE TABLE [dbo].[CLIENTE]
+(
+[CPF]              VARCHAR(14) NOT NULL,
+[NOME_CLIENTE]     VARCHAR(50) NOT NULL,
+[TELEFONE_CLIENTE] VARCHAR(15) NOT NULL,
+[CEP_CLIENTE]      VARCHAR(12) NOT NULL,
+[EMAIL_CLIENTE]    VARCHAR(100) NOT NULL,
+
+CONSTRAINT PK_CPF PRIMARY KEY (CPF)
+);
+
+------------------------------------------
+
+
+DROP CONSTRAINT 
+USE PETSHOP
+GO
+ALTER TABLE dbo.Consulta
+DROP CONSTRAINT Cliente_fk;
+GO
+
+----------------------------------------------
+
+
+RENAME COLUMN SQL 
+
+USE PETSHOP
+GO
+
+EXEC sp_rename 'CLIENTE.TELEFONE' , 'TELEFONE_CLIENTE', 'COLUMN'
+
+---------------------------------------------------------------
+
+
+CREATE TABLE [dbo].[AGENDAMENTO] 
+(
+[ID_AGENDAMENTO]      INT NOT 
+NULL IDENTITY(1,1),
+[CPF]                 VARCHAR(14) NOT NULL,
+[NOME_ANIMAL]         VARCHAR(20) NOT NULL,
+[TIPO_ANIMAL]         VARCHAR(20) NOT NULL,
+[SERVICO]             VARCHAR(15) NOT NULL,
+[DIA_AGENDAMENTO]     DATE        NOT NULL,  
+[HORARIO_AGENDAMENTO] TIME,
+[DESCRICAO]           VARCHAR(255)
+
+CONSTRAINT [FK_CPF] FOREIGN KEY (CPF) REFERENCES CLIENTE (CPF),
+
+);
+
+
+=====================================================
+USE PETSHOP
+
+go
+
+ALTER TABLE CLIENTE
+ALTER COLUMN TELEFONE_CLIENTE VARCHAR(15);
+
+========================================================
+
+
+SELECT MAX (ID_AGENDAMENTO) AS MaxID FROM AGENDAMENTO;
+
+
+==================================================
+
+
+
+insert into AGENDAMENTO(CPF, NOME_ANIMAL,TIPO_ANIMAL,SERVICO,DIA_AGENDAMENTO,HORARIO_AGENDAMENTO,DESCRICAO)
+VALUES
+('449,111,111-11','rex','CACHORRO','BANHO','2017-08-25','10:30', 'banho cahorro');
